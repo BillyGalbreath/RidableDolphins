@@ -52,14 +52,14 @@ public class RidableDolphins extends JavaPlugin implements Listener {
         }
         Player player = (Player) entity;
         if (!player.isSneaking()) {
-            dolphin.addPassenger(player);
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDolphinSpawn(CreatureSpawnEvent event) {
         if (event.getEntity() instanceof Dolphin) {
-            System.out.println("[CreatureSpawnEvent] Dolphin spawned!");
+            event.getEntity().setRemoveWhenFarAway(false);
         }
     }
 

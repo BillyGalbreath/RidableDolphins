@@ -12,9 +12,6 @@ public class EntityRidableDolphin extends EntityDolphin {
 
     public EntityRidableDolphin(World world) {
         super(world);
-
-        System.out.println("New Ridable Dolphin Spawned");
-
         this.persistent = true;
     }
 

@@ -12,18 +12,18 @@ public class EntityRidableDolphin extends EntityDolphin {
 
     public EntityRidableDolphin(World world) {
         super(world);
-        this.persistent = true;
+        this.persistent = true; // we want persistence
     }
 
     protected boolean isTypeNotPersistent() {
-        return false; // we want persistence
+        return false; // we definitely want persistence
     }
 
     @Override
     public void a(float f, float f1, float f2) {
         if (++bounceCounter > 10) {
             bounceCounter = 0;
-            bounceUp = !bounceUp;
+            bounceUp = !bounceUp; // bounce dat ass!
         }
 
         EntityPlayer rider = getRider();
@@ -56,11 +56,11 @@ public class EntityRidableDolphin extends EntityDolphin {
 
     public EntityPlayer getRider() {
         if (passengers != null && !passengers.isEmpty()) {
-            Entity entity = passengers.get(0);
+            Entity entity = passengers.get(0); // only care about first rider
             if (entity instanceof EntityPlayer) {
                 return (EntityPlayer) entity;
             }
         }
-        return null;
+        return null; // aww, lonely dolphin is lonely
     }
 }

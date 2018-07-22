@@ -3,3 +3,4 @@ main: ${project.groupId}.${project.artifactId}
 version: ${project.version}
 description: ${project.artifactId} Paper Plugin
 author: BillyGalbreath
+api-version: 1.13

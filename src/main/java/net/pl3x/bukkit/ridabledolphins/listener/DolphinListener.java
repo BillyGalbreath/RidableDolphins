@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -13,13 +14,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.Arrays;
 
-public class CommonListener implements Listener {
+public class DolphinListener implements Listener {
     private RidableDolphins plugin;
 
-    public CommonListener(RidableDolphins plugin) {
+    public DolphinListener(RidableDolphins plugin) {
         this.plugin = plugin;
     }
 
@@ -53,6 +55,30 @@ public class CommonListener implements Listener {
 
         // add player as rider
         dolphin.addPassenger(player);
+    }
+
+    @EventHandler
+    public void onDolphinDismount(EntityDismountEvent event) {
+        Entity dolphin = event.getDismounted();
+        if (dolphin.getType() != EntityType.DOLPHIN) {
+            return; // not a dolphin
+        }
+
+        if (event.getEntity().getType() != EntityType.PLAYER) {
+            return; // not a player
+        }
+
+        Player player = (Player) event.getEntity();
+        if (player.isSneaking()) {
+            return; // dismount from shift
+        }
+
+        // cancel dismount
+        if (event instanceof Cancellable) {
+            event.setCancelled(true);
+        } else {
+            dolphin.addPassenger(player);
+        }
     }
 
     @EventHandler

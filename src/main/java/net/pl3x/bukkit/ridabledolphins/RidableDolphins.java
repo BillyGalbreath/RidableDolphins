@@ -1,9 +1,7 @@
 package net.pl3x.bukkit.ridabledolphins;
 
 import net.pl3x.bukkit.ridabledolphins.entity.EntityRidableDolphin;
-import net.pl3x.bukkit.ridabledolphins.listener.CommonListener;
-import net.pl3x.bukkit.ridabledolphins.listener.PaperListener;
-import net.pl3x.bukkit.ridabledolphins.listener.SpigotListener;
+import net.pl3x.bukkit.ridabledolphins.listener.DolphinListener;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
@@ -26,6 +24,8 @@ public class RidableDolphins extends JavaPlugin implements Listener {
         try {
             // test for 1.13+ by looking for the Dolphin interface
             Class.forName("org.bukkit.entity.Dolphin");
+            // test for Spigot/Paper server listener API
+            Class.forName("org.spigotmc.event.entity.EntityDismountEvent");
         } catch (ClassNotFoundException e) {
             console.sendMessage(ChatColor.RED + "This server is unsupported!");
             console.sendMessage(ChatColor.RED + "Please use Spigot or Paper version 1.13 or higher!");
@@ -34,27 +34,8 @@ public class RidableDolphins extends JavaPlugin implements Listener {
             return;
         }
 
-        try {
-            // test for Paper server for better listener API
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            getServer().getPluginManager().registerEvents(new PaperListener(), this);
-        } catch (ClassNotFoundException e) {
-            try {
-                // test for Spigot server for minimum listener API
-                Class.forName("org.spigotmc.SpigotConfig");
-                getServer().getPluginManager().registerEvents(new SpigotListener(), this);
-            } catch (ClassNotFoundException e1) {
-                // server is not supported
-                console.sendMessage(ChatColor.RED + "This server is unsupported!");
-                console.sendMessage(ChatColor.RED + "Please use Spigot or Paper version 1.13 or higher!");
-                console.sendMessage(ChatColor.RED + "Plugin is now disabling itself!");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
-
         // register common listeners
-        getServer().getPluginManager().registerEvents(new CommonListener(this), this);
+        getServer().getPluginManager().registerEvents(new DolphinListener(this), this);
     }
 
     public LivingEntity replaceDolphin(LivingEntity dolphin) {

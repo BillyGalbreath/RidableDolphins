@@ -48,7 +48,7 @@ public class DolphinListener implements Listener {
             return; // player already riding something
         }
 
-        if (!player.hasPermission("allow.ride.dolphin")) {
+        if (!player.hasPermission("allow.dolphin.ride")) {
             player.sendMessage(ChatColor.RED + "You do not have permission to ride");
             return;
         }

@@ -29,7 +29,7 @@ public class CmdRidableDolphins implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("ridabledolphins.command.reload")) {
+        if (!sender.hasPermission("command.dolphin.reload")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission for that command");
             return true;
         }

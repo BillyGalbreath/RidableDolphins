@@ -1,20 +1,16 @@
 package net.pl3x.bukkit.ridabledolphins;
 
+import net.pl3x.bukkit.ridabledolphins.entity.EntityRidableDolphin;
+import net.pl3x.bukkit.ridabledolphins.listener.CommonListener;
+import net.pl3x.bukkit.ridabledolphins.listener.PaperListener;
+import net.pl3x.bukkit.ridabledolphins.listener.SpigotListener;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.spigotmc.event.entity.EntityDismountEvent;
-
-import java.util.Arrays;
 
 public class RidableDolphins extends JavaPlugin implements Listener {
     @Override
@@ -25,73 +21,40 @@ public class RidableDolphins extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(this, this);
-    }
+        ConsoleCommandSender console = getServer().getConsoleSender();
 
-    @EventHandler
-    public void onClickDolphin(PlayerInteractAtEntityEvent event) {
-        if (!(event.getRightClicked() instanceof LivingEntity)) {
-            return; // definitely not a dolphin
-        }
-        LivingEntity dolphin = replaceDolphin((LivingEntity) event.getRightClicked());
-        if (dolphin == null) {
-            return; // not a dolphin
-        }
-
-        if (!dolphin.getPassengers().isEmpty()) {
-            return; // dolphin already has rider
+        try {
+            // test for 1.13+ by looking for the Dolphin interface
+            Class.forName("org.bukkit.entity.Dolphin");
+        } catch (ClassNotFoundException e) {
+            console.sendMessage(ChatColor.RED + "This server is unsupported!");
+            console.sendMessage(ChatColor.RED + "Please use Spigot or Paper version 1.13 or higher!");
+            console.sendMessage(ChatColor.RED + "Plugin is now disabling itself!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
-        Player player = event.getPlayer();
-        if (player.getVehicle() != null) {
-            return; // player already riding something
+        try {
+            // test for Paper server for better listener API
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            getServer().getPluginManager().registerEvents(new PaperListener(), this);
+        } catch (ClassNotFoundException e) {
+            try {
+                // test for Spigot server for minimum listener API
+                Class.forName("org.spigotmc.SpigotConfig");
+                getServer().getPluginManager().registerEvents(new SpigotListener(), this);
+            } catch (ClassNotFoundException e1) {
+                // server is not supported
+                console.sendMessage(ChatColor.RED + "This server is unsupported!");
+                console.sendMessage(ChatColor.RED + "Please use Spigot or Paper version 1.13 or higher!");
+                console.sendMessage(ChatColor.RED + "Plugin is now disabling itself!");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
+            }
         }
 
-        // add player as rider
-        dolphin.addPassenger(player);
-    }
-
-    @EventHandler
-    public void onDolphinDismount(EntityDismountEvent event) {
-        Entity dolphin = event.getDismounted();
-        if (dolphin.getType() != EntityType.DOLPHIN) {
-            return; // not a dolphin
-        }
-
-        if (event.getEntity().getType() != EntityType.PLAYER) {
-            return; // not a player
-        }
-
-        if (((Player) event.getEntity()).isSneaking()) {
-            return; // dismount from shift
-        }
-
-        // cancel dismount
-        event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event) {
-        // replace all dolphins in chunk
-        Arrays.stream(event.getChunk().getEntities())
-                .filter(e -> e instanceof LivingEntity)
-                .forEach(e -> replaceDolphin((LivingEntity) e));
-    }
-
-    @EventHandler
-    public void onDolphinSpawn(CreatureSpawnEvent event) {
-        // replace dolphin on spawn
-        replaceDolphin(event.getEntity());
-    }
-
-    @EventHandler
-    public void onDolphinDeath(EntityDeathEvent event) {
-        if (event.getEntityType() != EntityType.DOLPHIN) {
-            return; // not a dolphin
-        }
-
-        // eject all dolphin's riders
-        event.getEntity().getPassengers().forEach(Entity::eject);
+        // register common listeners
+        getServer().getPluginManager().registerEvents(new CommonListener(this), this);
     }
 
     public LivingEntity replaceDolphin(LivingEntity dolphin) {

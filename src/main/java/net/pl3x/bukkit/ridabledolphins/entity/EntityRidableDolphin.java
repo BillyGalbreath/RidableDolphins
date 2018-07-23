@@ -1,4 +1,4 @@
-package net.pl3x.bukkit.ridabledolphins;
+package net.pl3x.bukkit.ridabledolphins.entity;
 
 import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityDolphin;

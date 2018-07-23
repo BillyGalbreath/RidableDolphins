@@ -4,3 +4,8 @@ version: ${project.version}
 description: ${project.artifactId} Paper Plugin
 author: BillyGalbreath
 api-version: 1.13
+
+permissions:
+    allow.ride.dolphin:
+        description: Allow to ride dolphins
+        default: op

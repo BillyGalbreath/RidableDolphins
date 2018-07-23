@@ -49,7 +49,7 @@ public class RidableDolphins extends JavaPlugin implements Listener {
         // commands \o/ idky i'm so excited
         getCommand("ridabledolphins").setExecutor(new CmdRidableDolphins(this));
 
-        // setup initial speed modifiers
+        // setup initial options
         RidableDolphins.verticalSpeedModifier = (float) getConfig().getDouble("speed-modifiers.vertical", 2.0D);
         RidableDolphins.horizontalSpeedModifier = (float) getConfig().getDouble("speed-modifiers.horizontal", 0.75D);
         RidableDolphins.forwardSpeedModifier = (float) getConfig().getDouble("speed-modifiers.forward", 0.15D);

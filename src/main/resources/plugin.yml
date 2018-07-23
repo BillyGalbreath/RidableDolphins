@@ -21,6 +21,9 @@ permissions:
     allow.ride.dolphin:
         description: Allow to ride dolphins
         default: op
+    allow.dolphin.shoot:
+        description: Allow to make dolphins shoot
+        default: op
     ridabledolphins.command.reload:
         description: Allow to reload config
         default: op

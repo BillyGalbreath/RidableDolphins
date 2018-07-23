@@ -49,7 +49,7 @@ public class DolphinListener implements Listener {
         }
 
         if (!player.hasPermission("allow.ride.dolphin")) {
-            player.sendMessage(ChatColor.RED + "You do not have permission for that");
+            player.sendMessage(ChatColor.RED + "You do not have permission to ride");
             return;
         }
 
@@ -75,7 +75,7 @@ public class DolphinListener implements Listener {
 
         // cancel dismount
         if (event instanceof Cancellable) {
-            event.setCancelled(true);
+            ((Cancellable) event).setCancelled(true);
         } else {
             dolphin.addPassenger(player);
         }

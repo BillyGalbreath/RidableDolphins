@@ -3,3 +3,9 @@ speed-modifiers:
   vertical: 2.0
   horizontal: 0.75
   forward: 0.15
+
+# Shooting options
+shooting:
+  cooldown: 10  # ticks to wait between shooting
+  speed: 1.0    # velocity speed
+  damage: 5.0   # damage to deal per hit (1 heart = 2.0 damage)

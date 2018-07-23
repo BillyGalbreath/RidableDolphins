@@ -103,7 +103,6 @@ public class EntityRidableDolphin extends EntityDolphin {
                 double velocity = motX * motX + motY * motY + motZ * motZ;
                 if (velocity > 0.2 || velocity < -0.2) {
                     int i = (int) (velocity * 5);
-                    System.out.println(i);
                     for (int j = 0; j < i; j++) {
                         spawnParticle(Particles.e);
                     }

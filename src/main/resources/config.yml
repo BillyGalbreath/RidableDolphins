@@ -1,0 +1,5 @@
+# Speed modifiers to fine control speed of dolphin riding
+speed-modifiers:
+  vertical: 2.0
+  horizontal: 0.75
+  forward: 0.15

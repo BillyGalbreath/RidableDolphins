@@ -5,7 +5,22 @@ description: ${project.artifactId} Spigot/Paper Plugin
 author: BillyGalbreath
 api-version: 1.13
 
+commands:
+    ridabledolphins:
+        description: Reload config
+        usage: /<command> reload
+        aliases:
+        - rideabledolphins
+        - rideabledolphin
+        - ridabledolphin
+        - dolphins
+        - dolphin
+        - rd
+
 permissions:
     allow.ride.dolphin:
         description: Allow to ride dolphins
+        default: op
+    ridabledolphins.command.reload:
+        description: Allow to reload config
         default: op

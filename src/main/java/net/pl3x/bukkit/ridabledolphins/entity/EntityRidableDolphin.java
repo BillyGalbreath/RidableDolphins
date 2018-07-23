@@ -5,6 +5,7 @@ import net.minecraft.server.v1_13_R1.EntityDolphin;
 import net.minecraft.server.v1_13_R1.EntityPlayer;
 import net.minecraft.server.v1_13_R1.EnumMoveType;
 import net.minecraft.server.v1_13_R1.World;
+import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
 
 public class EntityRidableDolphin extends EntityDolphin {
     private int bounceCounter = 0;
@@ -42,8 +43,9 @@ public class EntityRidableDolphin extends EntityDolphin {
                 if (forward == 0F) {
                     vertical = 0F;
                 }
-                this.a(0, vertical * 2, forward, this.cJ() * 5);
-                this.move(EnumMoveType.PLAYER, this.motX / 2, this.motY, this.motZ / 2);
+
+                this.a(0, vertical * RidableDolphins.verticalSpeedModifier, forward, this.cJ() * RidableDolphins.forwardSpeedModifier);
+                this.move(EnumMoveType.PLAYER, this.motX * RidableDolphins.horizontalSpeedModifier, this.motY, this.motZ * RidableDolphins.horizontalSpeedModifier);
                 this.motY *= 0.8999999761581421D;
                 this.motX *= 0.8999999761581421D;
                 this.motZ *= 0.8999999761581421D;

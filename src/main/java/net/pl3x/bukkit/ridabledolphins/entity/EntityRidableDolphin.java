@@ -87,15 +87,17 @@ public class EntityRidableDolphin extends EntityDolphin {
             if (isInWater()) {
                 float forward = rider.bj; // forward motion
                 float vertical = f1; // vertical motion
+                float strafe = rider.bh; // sideways motion
                 if (forward <= 0.0F) {
                     forward *= 0.25F; // slow down reverse motion
-                    vertical = -vertical;
+                    vertical = -vertical * 0.1F;
+                    strafe *= 0.25F;
                 }
                 if (forward == 0F) {
                     vertical = 0F;
                 }
 
-                a(0, vertical * RidableDolphins.verticalSpeedModifier, forward, cJ() * RidableDolphins.forwardSpeedModifier);
+                a(strafe, vertical * RidableDolphins.verticalSpeedModifier, forward, cJ() * RidableDolphins.forwardSpeedModifier);
                 move(EnumMoveType.PLAYER, this.motX * RidableDolphins.horizontalSpeedModifier, motY, motZ * RidableDolphins.horizontalSpeedModifier);
                 motY *= 0.8999999761581421D;
                 motX *= 0.8999999761581421D;
@@ -153,7 +155,7 @@ public class EntityRidableDolphin extends EntityDolphin {
         }
 
         spit.shoot(d0, d1, d2, RidableDolphins.shootingSpeed, 5.0F);
-        world.a((EntityHuman) null, locX, locY, locZ, SoundEffects.ENTITY_DOLPHIN_ATTACK, bV(), 1.0F, 1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F);
+        a(SoundEffects.ENTITY_DOLPHIN_ATTACK, 1.0F, 1.0F);
         world.addEntity(spit);
     }
 

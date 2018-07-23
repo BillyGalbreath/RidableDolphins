@@ -86,7 +86,7 @@ public class EntityRidableDolphin extends EntityDolphin {
 
             if (isInWater()) {
                 float forward = rider.bj; // forward motion
-                float vertical = f1; // vertical motion
+                float vertical = -(rider.pitch/90); // vertical motion
                 float strafe = rider.bh; // sideways motion
                 if (forward <= 0.0F) {
                     forward *= 0.25F; // slow down reverse motion

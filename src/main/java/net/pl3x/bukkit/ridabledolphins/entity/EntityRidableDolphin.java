@@ -71,7 +71,7 @@ public class EntityRidableDolphin extends EntityDolphin {
         }
 
         EntityPlayer rider = getRider();
-        if (rider != null) {
+        if (rider != null && getAirTicks() > 150) {
             setYawPitch(lastYaw = yaw = rider.yaw, pitch = (rider.pitch * 0.5F));
             aQ = yaw; // renderYawOffset
             aS = aQ; // rotationYawHead

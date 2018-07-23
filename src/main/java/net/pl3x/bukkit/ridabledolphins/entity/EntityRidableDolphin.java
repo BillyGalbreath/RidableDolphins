@@ -8,8 +8,11 @@ import net.minecraft.server.v1_13_R1.EntityLiving;
 import net.minecraft.server.v1_13_R1.EntityPlayer;
 import net.minecraft.server.v1_13_R1.EnumMoveType;
 import net.minecraft.server.v1_13_R1.MathHelper;
+import net.minecraft.server.v1_13_R1.ParticleType;
+import net.minecraft.server.v1_13_R1.Particles;
 import net.minecraft.server.v1_13_R1.SoundEffects;
 import net.minecraft.server.v1_13_R1.World;
+import net.minecraft.server.v1_13_R1.WorldServer;
 import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
 import net.pl3x.bukkit.ridabledolphins.util.Vector3D;
 import org.bukkit.ChatColor;
@@ -99,6 +102,16 @@ public class EntityRidableDolphin extends EntityDolphin {
 
                 a(strafe, vertical * RidableDolphins.verticalSpeedModifier, forward, cJ() * RidableDolphins.forwardSpeedModifier);
                 move(EnumMoveType.PLAYER, this.motX * RidableDolphins.horizontalSpeedModifier, motY, motZ * RidableDolphins.horizontalSpeedModifier);
+
+                double velocity =  motX * motX + motY * motY + motZ * motZ;
+                if (velocity > 0.2 || velocity < -0.2) {
+                    int i = (int) (velocity * 5);
+                    System.out.println(i);
+                    for (int j = 0; j < i; j++) {
+                        spawnParticle(Particles.e);
+                    }
+                }
+
                 motY *= 0.8999999761581421D;
                 motX *= 0.8999999761581421D;
                 motZ *= 0.8999999761581421D;
@@ -194,5 +207,13 @@ public class EntityRidableDolphin extends EntityDolphin {
         if (Math.abs(d.z * c.x - d.x * c.z) > e.z * ad.x + e.x * ad.z + epsilon) return false;
         if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon) return false;
         return true;
+    }
+
+    private void spawnParticle(ParticleType particle) {
+        ((WorldServer) world).sendParticles(world.players, null, particle,
+                locX + random.nextFloat() * 2F - 1F,
+                locY + random.nextFloat() * 2F - 1F,
+                locZ + random.nextFloat() * 2F - 1F,
+                1, 0, 0, 0, 0);
     }
 }

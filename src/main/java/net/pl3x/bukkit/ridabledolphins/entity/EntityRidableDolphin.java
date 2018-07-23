@@ -218,7 +218,7 @@ public class EntityRidableDolphin extends EntityDolphin {
     }
 
     private void spawnParticle(ParticleType particle) {
-        ((WorldServer) world).sendParticles(world.players, null, particle,
+        ((WorldServer) world).sendParticles(null, particle,
                 locX + random.nextFloat() * 2F - 1F,
                 locY + random.nextFloat() * 2F - 1F,
                 locZ + random.nextFloat() * 2F - 1F,

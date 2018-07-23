@@ -15,13 +15,17 @@ import net.minecraft.server.v1_13_R1.World;
 import net.minecraft.server.v1_13_R1.WorldServer;
 import net.pl3x.bukkit.ridabledolphins.configuration.Config;
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
+import net.pl3x.bukkit.ridabledolphins.util.BoundingBox;
+import net.pl3x.bukkit.ridabledolphins.util.RayTrace;
 import net.pl3x.bukkit.ridabledolphins.util.Vector3D;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -144,23 +148,31 @@ public class EntityRidableDolphin extends EntityDolphin {
         EntityDolphinSpit spit = new EntityDolphinSpit(world, this, rider);
 
         double d0, d1, d2;
-        Block targetBlock = rider.getBukkitEntity().getTargetBlock(transparent, 120);
+        Vector targetBlock = getTargetLocation(rider);
         EntityLiving targetEntity = getTargetEntity(rider);
         if (targetEntity != null) {
             d0 = targetEntity.locX - locX;
-            d1 = targetEntity.locY - locY;
+            d1 = (targetEntity.locY + (targetEntity.getBoundingBox().a()) / 2) - locY;
             d2 = targetEntity.locZ - locZ;
         } else if (targetBlock != null) {
-            Location loc = targetBlock.getLocation();
-            d0 = (loc.getX() + 0.5F) - locX;
-            d1 = (loc.getY() + 0.5F) - locY;
-            d2 = (loc.getZ() + 0.5F) - locZ;
+            d0 = (targetBlock.getX()) - locX;
+            d1 = (targetBlock.getY() - 0.5) - locY;
+            d2 = (targetBlock.getZ()) - locZ;
         } else {
-            float p = rider.pitch;
-            p += 10F;
-            d0 = -MathHelper.sin(rider.yaw * 0.017453292F) * MathHelper.cos(p * 0.017453292F);
-            d1 = -MathHelper.sin(p * 0.017453292F);
-            d2 = MathHelper.cos(rider.yaw * 0.017453292F) * MathHelper.cos(p * 0.017453292F);
+            Block block = rider.getBukkitEntity().getTargetBlock(transparent, 120);
+            if (block != null) {
+                Location l = block.getLocation();
+                d0 = (l.getX() + 0.5) - locX;
+                d1 = (l.getY() + 0.5) - locY;
+                d2 = (l.getZ() + 0.5) - locZ;
+            } else {
+                // this shit is all fucked up. only use as last resort
+                float p = rider.pitch;
+                p += 10F;
+                d0 = -MathHelper.sin(rider.yaw * 0.017453292F) * MathHelper.cos(p * 0.017453292F);
+                d1 = -MathHelper.sin(p * 0.017453292F);
+                d2 = MathHelper.cos(rider.yaw * 0.017453292F) * MathHelper.cos(p * 0.017453292F);
+            }
         }
 
         spit.shoot(d0, d1, d2, Config.SHOOTING_SPEED, 5.0F);
@@ -179,7 +191,7 @@ public class EntityRidableDolphin extends EntityDolphin {
             Vector3D entityPos = new Vector3D(entity.locX, entity.locY, entity.locZ);
             Vector3D minimum = entityPos.add(-0.5, 0, -0.5);
             Vector3D maximum = entityPos.add(0.5, 1.67, 0.5);
-            if (entity instanceof EntityLiving && entity != this && entity != rider && hasIntersection(playerStart, playerEnd, minimum, maximum)) {
+            if (entity instanceof EntityLiving && entity != this && entity != rider && hasIntersection(playerStart, playerEnd, minimum, maximum) && hasLineOfSight(entity)) {
                 if (target == null || targetPos.distanceSquared(playerStart) > entityPos.distanceSquared(playerStart)) {
                     target = (EntityLiving) entity;
                     targetPos = new Vector3D(target.locX, target.locY, target.locZ);
@@ -211,5 +223,26 @@ public class EntityRidableDolphin extends EntityDolphin {
                 locY + random.nextFloat() * 2F - 1F,
                 locZ + random.nextFloat() * 2F - 1F,
                 1, 0, 0, 0, 0);
+    }
+
+    private Vector getTargetLocation(EntityHuman rider) {
+        RayTrace rayTrace = new RayTrace(rider.getBukkitEntity().getEyeLocation());
+        ArrayList<Vector> positions = rayTrace.traverse(120, 0.1);
+
+        org.bukkit.World w = rider.getBukkitEntity().getWorld();
+        for (Vector pos : positions) {
+            Block block = pos.toBlockVector().toLocation(w).getBlock();
+            if (block.getType() == Material.AIR || block.getType() == Material.WATER) {
+                continue; // ignore air and water blocks
+            }
+            BoundingBox box = new BoundingBox(block);
+            for (Vector position : positions) {
+                if (rayTrace.intersects(position, box.getMin(), box.getMax())) {
+                    return pos;
+                }
+            }
+        }
+
+        return null;
     }
 }

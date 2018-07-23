@@ -55,7 +55,8 @@ public class RidableDolphins extends JavaPlugin implements Listener {
 
         // spawn ridable dolphin
         EntityRidableDolphin ridableDolphin = new EntityRidableDolphin(nmsDolphin.world);
-        ridableDolphin.setPosition(nmsDolphin.locX, nmsDolphin.locY, nmsDolphin.locZ);
+        ridableDolphin.setPositionRotation(nmsDolphin.locX, nmsDolphin.locY, nmsDolphin.locZ,
+                dolphin.getLocation().getYaw(), dolphin.getLocation().getPitch());
         nmsDolphin.world.addEntity(ridableDolphin);
 
         // ridable dolphin \o/

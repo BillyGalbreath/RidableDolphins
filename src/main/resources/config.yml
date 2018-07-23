@@ -1,3 +1,6 @@
+# Language file (for translations)
+language-file: lang-en.yml
+
 # Speed modifiers to fine control speed of dolphin riding
 speed-modifiers:
   vertical: 2.0

@@ -1,7 +1,8 @@
 package net.pl3x.bukkit.ridabledolphins.command;
 
 import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
-import org.bukkit.ChatColor;
+import net.pl3x.bukkit.ridabledolphins.configuration.Config;
+import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -30,25 +31,23 @@ public class CmdRidableDolphins implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("command.dolphin.reload")) {
-            sender.sendMessage(ChatColor.RED + "You do not have permission for that command");
+            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
             return true;
         }
 
         if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-            plugin.reloadConfig();
+            Config.reload();
+            Lang.reload();
 
-            RidableDolphins.verticalSpeedModifier = (float) plugin.getConfig().getDouble("speed-modifiers.vertical");
-            RidableDolphins.horizontalSpeedModifier = (float) plugin.getConfig().getDouble("speed-modifiers.horizontal");
-            RidableDolphins.forwardSpeedModifier = (float) plugin.getConfig().getDouble("speed-modifiers.forward");
-            RidableDolphins.shootingSpeed = (float) plugin.getConfig().getDouble("shooting.speed", 8.0D);
-            RidableDolphins.shootingDamage = (float) plugin.getConfig().getDouble("shooting.damage", 5.0D);
-            RidableDolphins.shootingCooldown = (int) plugin.getConfig().getDouble("shooting.cooldown", 10);
-
-            sender.sendMessage(ChatColor.GREEN + plugin.getName() + " v" + plugin.getDescription().getVersion() + " reloaded config");
+            Lang.send(sender, Lang.RELOAD
+                    .replace("{plugin}", plugin.getName())
+                    .replace("{version}", plugin.getDescription().getVersion()));
             return true;
         }
 
-        sender.sendMessage(ChatColor.GREEN + plugin.getName() + " v" + plugin.getDescription().getVersion());
+        Lang.send(sender, Lang.VERSION
+                .replace("{version}", plugin.getDescription().getVersion())
+                .replace("{plugin}", plugin.getName()));
         return true;
     }
 }

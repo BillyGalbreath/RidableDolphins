@@ -13,9 +13,9 @@ import net.minecraft.server.v1_13_R1.Particles;
 import net.minecraft.server.v1_13_R1.SoundEffects;
 import net.minecraft.server.v1_13_R1.World;
 import net.minecraft.server.v1_13_R1.WorldServer;
-import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
+import net.pl3x.bukkit.ridabledolphins.configuration.Config;
+import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
 import net.pl3x.bukkit.ridabledolphins.util.Vector3D;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -86,7 +86,7 @@ public class EntityRidableDolphin extends EntityDolphin {
 
             if (isInWater()) {
                 float forward = rider.bj; // forward motion
-                float vertical = -(rider.pitch/90); // vertical motion
+                float vertical = -(rider.pitch / 90); // vertical motion
                 float strafe = rider.bh; // sideways motion
                 if (forward <= 0.0F) {
                     forward *= 0.25F; // slow down reverse motion
@@ -97,8 +97,8 @@ public class EntityRidableDolphin extends EntityDolphin {
                     vertical = 0F;
                 }
 
-                a(strafe, vertical * RidableDolphins.verticalSpeedModifier, forward, cJ() * RidableDolphins.forwardSpeedModifier);
-                move(EnumMoveType.PLAYER, this.motX * RidableDolphins.horizontalSpeedModifier, motY, motZ * RidableDolphins.horizontalSpeedModifier);
+                a(strafe, vertical * Config.SPEED_VERTICAL, forward, cJ() * Config.SPEED_FORWARD);
+                move(EnumMoveType.PLAYER, this.motX * Config.SPEED_HORIZONTAL, motY, motZ * Config.SPEED_HORIZONTAL);
 
                 double velocity = motX * motX + motY * motY + motZ * motZ;
                 if (velocity > 0.2 || velocity < -0.2) {
@@ -129,7 +129,7 @@ public class EntityRidableDolphin extends EntityDolphin {
     }
 
     public void shoot(EntityPlayer rider) {
-        shootCounter = RidableDolphins.shootingCooldown;
+        shootCounter = Config.SHOOTING_COOLDOWN;
 
         if (rider == null) {
             return;
@@ -137,7 +137,7 @@ public class EntityRidableDolphin extends EntityDolphin {
 
         CraftPlayer player = rider.getBukkitEntity();
         if (!player.hasPermission("allow.dolphin.shoot")) {
-            player.sendMessage(ChatColor.RED + "You do not have permission to shoot");
+            Lang.send(player, Lang.SHOOT_NO_PERMISSION);
             return;
         }
 
@@ -163,7 +163,7 @@ public class EntityRidableDolphin extends EntityDolphin {
             d2 = MathHelper.cos(rider.yaw * 0.017453292F) * MathHelper.cos(p * 0.017453292F);
         }
 
-        spit.shoot(d0, d1, d2, RidableDolphins.shootingSpeed, 5.0F);
+        spit.shoot(d0, d1, d2, Config.SHOOTING_SPEED, 5.0F);
         a(SoundEffects.ENTITY_DOLPHIN_ATTACK, 1.0F, 1.0F);
         world.addEntity(spit);
     }

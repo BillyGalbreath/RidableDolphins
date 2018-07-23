@@ -14,7 +14,7 @@ import net.minecraft.server.v1_13_R1.MovingObjectPosition;
 import net.minecraft.server.v1_13_R1.NBTTagCompound;
 import net.minecraft.server.v1_13_R1.Vec3D;
 import net.minecraft.server.v1_13_R1.World;
-import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
+import net.pl3x.bukkit.ridabledolphins.configuration.Config;
 
 import java.util.Iterator;
 import java.util.List;
@@ -156,7 +156,7 @@ public class EntityDolphinSpit extends EntityShulkerBullet implements IProjectil
     // onHit
     public void onHit(MovingObjectPosition pos) {
         if (pos.entity != null && dolphin != null) {
-            pos.entity.damageEntity(DamageSource.a(this, dolphin).c(), RidableDolphins.shootingDamage);
+            pos.entity.damageEntity(DamageSource.a(this, dolphin).c(), Config.SHOOTING_DAMAGE);
         }
         die();
     }

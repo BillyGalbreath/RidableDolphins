@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.ridabledolphins.listener;
 
 import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
-import org.bukkit.ChatColor;
+import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -49,7 +49,7 @@ public class DolphinListener implements Listener {
         }
 
         if (!player.hasPermission("allow.dolphin.ride")) {
-            player.sendMessage(ChatColor.RED + "You do not have permission to ride");
+            Lang.send(player, Lang.RIDE_NO_PERMISSION);
             return;
         }
 

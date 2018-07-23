@@ -27,7 +27,6 @@ import java.util.Set;
 
 public class EntityRidableDolphin extends EntityDolphin {
     private static Field jumping;
-    private static Field bG;
 
     private int bounceCounter = 0;
     private boolean bounceUp = false;
@@ -43,9 +42,7 @@ public class EntityRidableDolphin extends EntityDolphin {
         if (jumping == null) {
             try {
                 jumping = EntityLiving.class.getDeclaredField("bg");
-                bG = EntityLiving.class.getDeclaredField("bG");
                 jumping.setAccessible(true);
-                bG.setAccessible(true);
             } catch (NoSuchFieldException ignore) {
             }
         }
@@ -103,7 +100,7 @@ public class EntityRidableDolphin extends EntityDolphin {
                 a(strafe, vertical * RidableDolphins.verticalSpeedModifier, forward, cJ() * RidableDolphins.forwardSpeedModifier);
                 move(EnumMoveType.PLAYER, this.motX * RidableDolphins.horizontalSpeedModifier, motY, motZ * RidableDolphins.horizontalSpeedModifier);
 
-                double velocity =  motX * motX + motY * motY + motZ * motZ;
+                double velocity = motX * motX + motY * motY + motZ * motZ;
                 if (velocity > 0.2 || velocity < -0.2) {
                     int i = (int) (velocity * 5);
                     System.out.println(i);

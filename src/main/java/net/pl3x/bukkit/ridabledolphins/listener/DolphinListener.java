@@ -92,7 +92,7 @@ public class DolphinListener implements Listener {
     @EventHandler
     public void onDolphinSpawn(CreatureSpawnEvent event) {
         // replace dolphin on spawn
-        plugin.replaceDolphin(event.getEntity());
+        plugin.getServer().getScheduler().runTask(plugin, () -> plugin.replaceDolphin(event.getEntity()));
     }
 
     @EventHandler

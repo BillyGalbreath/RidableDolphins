@@ -1,0 +1,7 @@
+# Translations by NOBUTSS https://www.spigotmc.org/threads/1-13-ridable-dolphins-spigot-paper.330108/#post-3084769
+
+command-no-permission: "&c你没有权限使用这个命令!"
+ride-no-permission: "&c你没有权限骑乘!"
+shoot-no-permission: "&c你没有权限弹射出去!"
+version: "&d{plugin} v{version}."
+reload: "&d{plugin} v{version} 配置已重载."

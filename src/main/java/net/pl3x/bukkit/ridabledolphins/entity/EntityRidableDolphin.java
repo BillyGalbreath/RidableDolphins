@@ -148,7 +148,10 @@ public class EntityRidableDolphin extends EntityDolphin {
         EntityDolphinSpit spit = new EntityDolphinSpit(world, this, rider);
 
         double d0, d1, d2;
-        Vector targetBlock = getTargetLocation(rider);
+        // TODO: FIX THIS
+        // https://www.spigotmc.org/threads/1-13-ridable-dolphins-spigot-paper.330108/page-2#post-3086806
+        //Vector targetBlock = getTargetLocation(rider);
+        Vector targetBlock = null;
         EntityLiving targetEntity = getTargetEntity(rider);
         if (targetEntity != null) {
             d0 = targetEntity.locX - locX;

@@ -64,6 +64,10 @@ public class DolphinListener implements Listener {
             return; // not a dolphin
         }
 
+        if (dolphin.isDead()) {
+            return; // dolphin died
+        }
+
         if (event.getEntity().getType() != EntityType.PLAYER) {
             return; // not a player
         }

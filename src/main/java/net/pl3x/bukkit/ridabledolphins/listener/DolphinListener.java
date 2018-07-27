@@ -1,30 +1,22 @@
 package net.pl3x.bukkit.ridabledolphins.listener;
 
-import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 public class DolphinListener implements Listener {
-    private RidableDolphins plugin;
     private Field ax;
 
-    public DolphinListener(RidableDolphins plugin) {
-        this.plugin = plugin;
-
+    public DolphinListener() {
         try {
             ax = net.minecraft.server.v1_13_R1.Entity.class.getDeclaredField("ax");
             ax.setAccessible(true);
@@ -39,11 +31,8 @@ public class DolphinListener implements Listener {
             return; // dont fire twice
         }
 
-        if (!(event.getRightClicked() instanceof LivingEntity)) {
-            return; // definitely not a dolphin
-        }
-        LivingEntity dolphin = plugin.replaceDolphin((LivingEntity) event.getRightClicked());
-        if (dolphin == null) {
+        Entity dolphin = event.getRightClicked();
+        if (dolphin.getType() != EntityType.DOLPHIN) {
             return; // not a dolphin
         }
 
@@ -92,20 +81,6 @@ public class DolphinListener implements Listener {
         // cancel dismount
         event.setCancelled(true);
         setVehicleBack(player, dolphin);
-    }
-
-    @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event) {
-        // replace all dolphins in chunk
-        Arrays.stream(event.getChunk().getEntities())
-                .filter(e -> e instanceof LivingEntity)
-                .forEach(e -> plugin.replaceDolphin((LivingEntity) e));
-    }
-
-    @EventHandler
-    public void onDolphinSpawn(CreatureSpawnEvent event) {
-        // replace dolphin on spawn
-        plugin.getServer().getScheduler().runTask(plugin, () -> plugin.replaceDolphin(event.getEntity()));
     }
 
     // Lets fix what md_5 wont. Can be removed in a future version when fixed

@@ -34,10 +34,9 @@ public class RidableDolphins extends JavaPlugin implements Listener {
         EntityTypes.a<EntityRidableDolphin> type = EntityTypes.a.a(EntityRidableDolphin.class, (Function<? super World, ? extends EntityRidableDolphin>) EntityRidableDolphin::new);
         EntityTypes<EntityRidableDolphin> types = type.a("dolphin");
         MinecraftKey key = new MinecraftKey("dolphin");
-        Class<? extends EntityRidableDolphin> entityClass = type.getEntityClass();
         try {
-            EntityTypes.clsToKeyMap.put(entityClass, key);
-            EntityTypes.clsToTypeMap.put(entityClass, EntityType.fromName("dolphin"));
+            EntityTypes.clsToKeyMap.put(EntityRidableDolphin.class, key);
+            EntityTypes.clsToTypeMap.put(EntityRidableDolphin.class, EntityType.fromName("dolphin"));
         } catch (Exception ignore) {
         }
         try {

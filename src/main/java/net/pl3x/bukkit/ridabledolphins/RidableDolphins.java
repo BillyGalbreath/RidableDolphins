@@ -37,7 +37,7 @@ public class RidableDolphins extends JavaPlugin implements Listener {
         try {
             EntityTypes.clsToKeyMap.put(EntityRidableDolphin.class, key);
             EntityTypes.clsToTypeMap.put(EntityRidableDolphin.class, EntityType.fromName("dolphin"));
-        } catch (Exception ignore) {
+        } catch (NoSuchFieldError ignore) {
         }
         try {
             Field registryMaterials_fieldA = RegistryMaterials.class.getDeclaredField("a");

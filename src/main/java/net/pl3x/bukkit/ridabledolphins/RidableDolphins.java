@@ -5,13 +5,16 @@ import net.pl3x.bukkit.ridabledolphins.configuration.Config;
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
 import net.pl3x.bukkit.ridabledolphins.entity.EntityRidableDolphin;
 import net.pl3x.bukkit.ridabledolphins.listener.DolphinListener;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 public class RidableDolphins extends JavaPlugin implements Listener {
     @Override
@@ -39,11 +42,36 @@ public class RidableDolphins extends JavaPlugin implements Listener {
             return;
         }
 
+        // check for cancellable EntityDismountEvent
+        if (!(new EntityDismountEvent(null, null) instanceof Cancellable)) {
+            ConsoleCommandSender console = getServer().getConsoleSender();
+            console.sendMessage(ChatColor.RED + "This version of Spigot is too old!");
+            console.sendMessage(ChatColor.RED + "Please re-run BuildTools for an updated copy!");
+            console.sendMessage(ChatColor.RED + "Plugin is now disabling itself!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         // listeners \o/
         getServer().getPluginManager().registerEvents(new DolphinListener(this), this);
 
         // commands \o/ idky i'm so excited
         getCommand("ridabledolphins").setExecutor(new CmdRidableDolphins(this));
+
+        Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.SimplePie("server_version", () -> {
+            try {
+                Class.forName("com.destroystokyo.paper.PaperConfig");
+                return "Paper";
+            } catch (Exception ignore) {
+            }
+            try {
+                Class.forName("org.spigotmc.SpigotConfig");
+                return "Spigot";
+            } catch (Exception ignore2) {
+            }
+            return "CraftBukkit";
+        }));
     }
 
     public LivingEntity replaceDolphin(LivingEntity dolphin) {

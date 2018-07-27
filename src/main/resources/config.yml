@@ -7,8 +7,24 @@ speed-modifiers:
   horizontal: 0.75
   forward: 0.15
 
+# Enable small up/down bouncing motion when dolphin is still
+bounce: true
+
+# Enable bubble trail when riding dolphins
+bubbles: true
+
+# What action to do when pressing spacebar
+# Valid options are "shoot" or "dash"
+spacebar: shoot
+
 # Shooting options
 shooting:
   cooldown: 10  # ticks to wait between shooting
   speed: 1.0    # velocity speed
   damage: 5.0   # damage to deal per hit (1 heart = 2.0 damage)
+
+# Dash options
+dashing:
+  cooldown: 100  # ticks to wait between dashing
+  boost: 1.5     # speed boost multiplier
+  duration: 20   # ticks boost lasts for with each spacebar press

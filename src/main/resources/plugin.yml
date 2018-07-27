@@ -21,6 +21,9 @@ permissions:
     allow.dolphin.ride:
         description: Allow to ride dolphins
         default: op
+    allow.dolphin.dash:
+        description: Allow to make dolphins dash
+        default: op
     allow.dolphin.shoot:
         description: Allow to make dolphins shoot
         default: op

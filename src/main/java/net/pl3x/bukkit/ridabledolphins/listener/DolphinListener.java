@@ -2,27 +2,35 @@ package net.pl3x.bukkit.ridabledolphins.listener;
 
 import net.pl3x.bukkit.ridabledolphins.RidableDolphins;
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 public class DolphinListener implements Listener {
     private RidableDolphins plugin;
+    private Field ax;
 
     public DolphinListener(RidableDolphins plugin) {
         this.plugin = plugin;
+
+        try {
+            ax = net.minecraft.server.v1_13_R1.Entity.class.getDeclaredField("ax");
+            ax.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler
@@ -77,12 +85,13 @@ public class DolphinListener implements Listener {
             return; // dismount from shift
         }
 
-        // cancel dismount
-        if (event instanceof Cancellable) {
-            ((Cancellable) event).setCancelled(true);
-        } else {
-            dolphin.addPassenger(player);
+        if (player.isDead()) {
+            return; // player died
         }
+
+        // cancel dismount
+        event.setCancelled(true);
+        setVehicleBack(player, dolphin);
     }
 
     @EventHandler
@@ -99,13 +108,18 @@ public class DolphinListener implements Listener {
         plugin.getServer().getScheduler().runTask(plugin, () -> plugin.replaceDolphin(event.getEntity()));
     }
 
-    @EventHandler
-    public void onDolphinDeath(EntityDeathEvent event) {
-        if (event.getEntityType() != EntityType.DOLPHIN) {
-            return; // not a dolphin
+    // Lets fix what md_5 wont. Can be removed in a future version when fixed
+    // https://hub.spigotmc.org/jira/browse/SPIGOT-1588
+    // https://hub.spigotmc.org/jira/browse/SPIGOT-2466
+    // https://hub.spigotmc.org/jira/browse/SPIGOT-4113
+    // https://hub.spigotmc.org/jira/browse/SPIGOT-4163
+    private void setVehicleBack(Entity rider, Entity vehicle) {
+        if (ax != null) {
+            try {
+                ax.set(((CraftEntity) rider).getHandle(), ((CraftEntity) vehicle).getHandle());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
-
-        // eject all dolphin's riders
-        event.getEntity().getPassengers().forEach(Entity::eject);
     }
 }

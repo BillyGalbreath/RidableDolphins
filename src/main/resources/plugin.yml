@@ -6,27 +6,30 @@ author: BillyGalbreath
 api-version: 1.13
 
 commands:
-    ridabledolphins:
-        description: Reload config
-        usage: /<command> reload
-        aliases:
-        - rideabledolphins
-        - rideabledolphin
-        - ridabledolphin
-        - dolphins
-        - dolphin
-        - rd
+  ridabledolphins:
+    description: Reload config
+    usage: /<command> reload
+    aliases:
+    - rideabledolphins
+    - rideabledolphin
+    - ridabledolphin
+    - dolphins
+    - dolphin
+    - rd
 
 permissions:
-    allow.dolphin.ride:
-        description: Allow to ride dolphins
-        default: op
-    allow.dolphin.dash:
-        description: Allow to make dolphins dash
-        default: op
-    allow.dolphin.shoot:
-        description: Allow to make dolphins shoot
-        default: op
-    command.dolphin.reload:
-        description: Allow to reload config
-        default: op
+  allow.dolphin.collect:
+    description: Allow to collect dolphins in water buckets
+    default: op
+  allow.dolphin.dash:
+    description: Allow to make dolphins dash
+    default: op
+  allow.dolphin.ride:
+    description: Allow to ride dolphins
+    default: op
+  allow.dolphin.shoot:
+    description: Allow to make dolphins shoot
+    default: op
+  command.dolphin.reload:
+    description: Allow to reload config
+    default: op

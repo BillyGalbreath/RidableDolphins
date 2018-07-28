@@ -1,7 +1,10 @@
 # Translation by SpringBonnie https://www.spigotmc.org/threads/1-13-ridable-dolphins-spigot-paper.330108/page-2#post-3085884
 
 command-no-permission: "&cУ Вас нет прав, чтобы использовать эту команду!"
+collect-no-permission: "&cYou do not have permission to collect dolphins!"
 ride-no-permission: "&cУ Вас нет прав, чтобы сесть на дельфина!"
 shoot-no-permission: "&cУ Вас нет прав, чтобы стрельнуть с дельфина!"
+bucket-name: "&bBucket of Dolphin"
+bucket-lore: "This bucket contains a dolphin!\nRight click in water to place"
 version: "&e{plugin} &dv{version}&e."
 reload: "&e{plugin} &dv{version} &eконфиг успешно перезагружен."

@@ -1,5 +1,8 @@
 command-no-permission: "&cYou do not have permission for that command!"
+collect-no-permission: "&cYou do not have permission to collect dolphins!"
 ride-no-permission: "&cYou do not have permission to ride!"
 shoot-no-permission: "&cYou do not have permission to shoot!"
+bucket-name: "&bBucket of Dolphin"
+bucket-lore: "This bucket contains a dolphin!\nRight click in water to place"
 version: "&d{plugin} v{version}."
 reload: "&d{plugin} v{version} reloaded config."

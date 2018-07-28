@@ -1,9 +1,12 @@
 package net.pl3x.bukkit.ridabledolphins.listener;
 
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
+import net.pl3x.bukkit.ridabledolphins.entity.EntityRidableDolphin;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -86,7 +89,11 @@ public class DolphinListener implements Listener {
             player.getInventory().setItem(hand, bucket);
         }
 
-        player.getWorld().spawnEntity(event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().add(0.5, 0.5, 0.5), EntityType.DOLPHIN);
+        Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().add(0.5, 0.5, 0.5);
+        EntityRidableDolphin dolphin = new EntityRidableDolphin(((CraftWorld) player.getWorld()).getHandle());
+        dolphin.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
+        dolphin.world.addEntity(dolphin);
+
         event.setCancelled(true); // do not spawn a cod!
     }
 

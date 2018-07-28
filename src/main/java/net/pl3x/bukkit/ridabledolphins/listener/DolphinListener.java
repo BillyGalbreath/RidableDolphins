@@ -1,7 +1,6 @@
 package net.pl3x.bukkit.ridabledolphins.listener;
 
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -11,20 +10,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
-import java.lang.reflect.Field;
-
 public class DolphinListener implements Listener {
-    private Field ax;
-
-    public DolphinListener() {
-        try {
-            ax = net.minecraft.server.v1_13_R1.Entity.class.getDeclaredField("ax");
-            ax.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-    }
-
     @EventHandler
     public void onClickDolphin(PlayerInteractAtEntityEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) {
@@ -80,21 +66,5 @@ public class DolphinListener implements Listener {
 
         // cancel dismount
         event.setCancelled(true);
-        setVehicleBack(player, dolphin);
-    }
-
-    // Lets fix what md_5 wont. Can be removed in a future version when fixed
-    // https://hub.spigotmc.org/jira/browse/SPIGOT-1588
-    // https://hub.spigotmc.org/jira/browse/SPIGOT-2466
-    // https://hub.spigotmc.org/jira/browse/SPIGOT-4113
-    // https://hub.spigotmc.org/jira/browse/SPIGOT-4163
-    private void setVehicleBack(Entity rider, Entity vehicle) {
-        if (ax != null) {
-            try {
-                ax.set(((CraftEntity) rider).getHandle(), ((CraftEntity) vehicle).getHandle());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

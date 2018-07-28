@@ -43,19 +43,19 @@ public class RidableDolphins extends JavaPlugin implements Listener {
             Field registryMaterials_fieldA = RegistryMaterials.class.getDeclaredField("a");
             registryMaterials_fieldA.setAccessible(true);
             RegistryID<EntityTypes<?>> registryID = (RegistryID<EntityTypes<?>>) registryMaterials_fieldA.get(EntityTypes.REGISTRY);
-            int oldIndex = registryID.getId(EntityTypes.DOLPHIN);
-            Method registryID_methodE = RegistryID.class.getDeclaredMethod("e", int.class);
+            int originalID = registryID.getId(EntityTypes.DOLPHIN);
             Method registryID_methodD = RegistryID.class.getDeclaredMethod("d", Object.class);
-            registryID_methodE.setAccessible(true);
             registryID_methodD.setAccessible(true);
             int newIndex = (int) registryID_methodD.invoke(registryID, types);
             Field registryID_fieldB = RegistryID.class.getDeclaredField("b");
             registryID_fieldB.setAccessible(true);
             Object[] arrB = (Object[]) registryID_fieldB.get(registryID);
             arrB[newIndex] = types;
+            int oldIndex = -1;
             for (int i = 0; i < arrB.length; i++) {
                 if (arrB[i] == EntityTypes.DOLPHIN) {
                     arrB[i] = null;
+                    oldIndex = i;
                     break;
                 }
             }
@@ -64,12 +64,12 @@ public class RidableDolphins extends JavaPlugin implements Listener {
             registryID_fieldC.setAccessible(true);
             int[] arrC = (int[]) registryID_fieldC.get(registryID);
             arrC[oldIndex] = 0;
-            arrC[newIndex] = oldIndex;
+            arrC[newIndex] = originalID;
             registryID_fieldC.set(registryID, arrC);
             Field registryID_fieldD = RegistryID.class.getDeclaredField("d");
             registryID_fieldD.setAccessible(true);
             Object[] arrD = (Object[]) registryID_fieldD.get(registryID);
-            arrD[oldIndex] = types;
+            arrD[originalID] = types;
             registryID_fieldD.set(registryID, arrD);
             registryMaterials_fieldA.set(EntityTypes.REGISTRY, registryID);
             Field registryId_b = RegistryMaterials.class.getDeclaredField("b");

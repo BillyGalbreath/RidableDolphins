@@ -2,6 +2,8 @@ package net.pl3x.bukkit.ridabledolphins;
 
 import com.google.common.collect.HashBiMap;
 import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.Item;
+import net.minecraft.server.v1_13_R1.ItemMonsterEgg;
 import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.RegistryID;
 import net.minecraft.server.v1_13_R1.RegistryMaterials;
@@ -14,10 +16,13 @@ import net.pl3x.bukkit.ridabledolphins.entity.EntityRidableDolphin;
 import net.pl3x.bukkit.ridabledolphins.listener.DolphinListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
@@ -96,6 +101,15 @@ public class RidableDolphins extends JavaPlugin implements Listener {
             modifiersField.setInt(entityTypes_fieldDOLPHIN, entityTypes_fieldDOLPHIN.getModifiers() & ~Modifier.FINAL);
             entityTypes_fieldDOLPHIN.set(null, types);
         } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        Item dolphinSpawnEgg = CraftItemStack.asNMSCopy(new ItemStack(Material.DOLPHIN_SPAWN_EGG)).getItem();
+        try {
+            Field field_d = ItemMonsterEgg.class.getDeclaredField("d");
+            field_d.setAccessible(true);
+            field_d.set(dolphinSpawnEgg, EntityTypes.DOLPHIN);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

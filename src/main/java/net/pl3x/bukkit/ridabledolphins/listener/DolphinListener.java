@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -47,8 +48,14 @@ public class DolphinListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        ItemStack bucket = player.getInventory().getItem(event.getHand());
-        if (bucket.getType() != Material.WATER_BUCKET) {
+        ItemStack bucket = null;
+        EquipmentSlot hand = event.getHand();
+        if (hand == EquipmentSlot.HAND) {
+            bucket = player.getInventory().getItemInMainHand();
+        } else if (hand == EquipmentSlot.OFF_HAND) {
+            bucket = player.getInventory().getItemInOffHand();
+        }
+        if (bucket == null || bucket.getType() != Material.WATER_BUCKET) {
             return; // not a water bucket
         }
 
@@ -62,7 +69,12 @@ public class DolphinListener implements Listener {
             return;
         }
 
-        player.getInventory().setItem(event.getHand(), dolphin_bucket.clone());
+        if (hand == EquipmentSlot.HAND) {
+            player.getInventory().setItemInMainHand(dolphin_bucket.clone());
+        } else {
+            player.getInventory().setItemInOffHand(dolphin_bucket.clone());
+        }
+
         dolphin.remove();
         event.setCancelled(true);
     }
@@ -86,13 +98,20 @@ public class DolphinListener implements Listener {
 
         if (player.getGameMode() != GameMode.CREATIVE) {
             bucket.setAmount(Math.max(0, bucket.getAmount() - 1));
-            player.getInventory().setItem(hand, bucket);
+            if (hand == EquipmentSlot.HAND) {
+                player.getInventory().setItemInMainHand(bucket);
+            } else {
+                player.getInventory().setItemInOffHand(bucket);
+            }
         }
 
-        Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().add(0.5, 0.5, 0.5);
+        Block block = event.getBlockClicked().getRelative(event.getBlockFace());
+        Location loc = block.getLocation().add(0.5, 0.5, 0.5);
         EntityRidableDolphin dolphin = new EntityRidableDolphin(((CraftWorld) player.getWorld()).getHandle());
         dolphin.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
         dolphin.world.addEntity(dolphin);
+
+        block.setType(Material.WATER, true);
 
         event.setCancelled(true); // do not spawn a cod!
     }

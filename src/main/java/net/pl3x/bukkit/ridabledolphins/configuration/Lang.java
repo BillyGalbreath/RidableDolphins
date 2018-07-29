@@ -31,8 +31,8 @@ public class Lang {
 
         COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&cYou do not have permission for that command!");
         COLLECT_NO_PERMISSION = config.getString("collect-no-permission", "&cYou do not have permission to collect dolphins!");
-        RIDE_NO_PERMISSION = config.getString("command-no-permission", "&cYou do not have permission to ride!");
-        SHOOT_NO_PERMISSION = config.getString("command-no-permission", "&cYou do not have permission to shoot!");
+        RIDE_NO_PERMISSION = config.getString("ride-no-permission", "&cYou do not have permission to ride!");
+        SHOOT_NO_PERMISSION = config.getString("shoot-no-permission", "&cYou do not have permission to shoot!");
         VERSION = config.getString("version", "&d{plugin} v{version}.");
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded config.");
 

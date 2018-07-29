@@ -1,6 +1,9 @@
 package net.pl3x.bukkit.ridabledolphins;
 
 import com.google.common.collect.HashBiMap;
+import com.mojang.datafixers.types.Type;
+import net.minecraft.server.v1_13_R1.DataConverterRegistry;
+import net.minecraft.server.v1_13_R1.DataConverterTypes;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.Item;
 import net.minecraft.server.v1_13_R1.ItemMonsterEgg;
@@ -12,6 +15,7 @@ import net.minecraft.server.v1_13_R1.World;
 import net.pl3x.bukkit.ridabledolphins.command.CmdRidableDolphins;
 import net.pl3x.bukkit.ridabledolphins.configuration.Config;
 import net.pl3x.bukkit.ridabledolphins.configuration.Lang;
+import net.pl3x.bukkit.ridabledolphins.entity.EntityDolphinSpit;
 import net.pl3x.bukkit.ridabledolphins.entity.EntityRidableDolphin;
 import net.pl3x.bukkit.ridabledolphins.listener.DolphinListener;
 import org.bstats.bukkit.Metrics;
@@ -36,6 +40,10 @@ import java.util.function.Function;
 public class RidableDolphins extends JavaPlugin implements Listener {
     @Override
     public void onLoad() {
+        Map<Object, Type<?>> dataTypes = (Map<Object, Type<?>>) DataConverterRegistry.a().getSchema(15190).findChoiceType(DataConverterTypes.n).types();
+        dataTypes.put("minecraft:dolphin_spit", dataTypes.get("minecraft:llama_spit"));
+        EntityTypes.a("dolphin_spit", EntityTypes.a.a(EntityDolphinSpit.class, (Function<? super World, ? extends EntityDolphinSpit>) EntityDolphinSpit::new));
+
         EntityTypes.a<EntityRidableDolphin> type = EntityTypes.a.a(EntityRidableDolphin.class, (Function<? super World, ? extends EntityRidableDolphin>) EntityRidableDolphin::new);
         EntityTypes<EntityRidableDolphin> types = type.a("dolphin");
         MinecraftKey key = new MinecraftKey("dolphin");
